@@ -57,11 +57,6 @@ def fit_tx_extended(target_signal, terms):
     return pred
 
 def your_canceller(tx_n, rx):
-    """
-    Hybrid Iterative Cancellation Solution.
-    Combines extended non-linear terms, Alternating Least Squares (ALS), 
-    and Wiener deconvolution for spatial rank-1 interference.
-    """
     extra_pairs = [(2, 5), (5, 2), (4, 1), (1, 4), (4, 3), (3, 4), (4, 5), (5, 4)]
     all_terms = [bp(tx_n[:, 0] ** 2 * tx_n[:, 1].conj()), 
                  bp(tx_n[:, 1] ** 2 * tx_n[:, 0].conj()),
@@ -81,7 +76,6 @@ def your_canceller(tx_n, rx):
     rank1_pred = np.zeros_like(rx)
     
     for i in range(2):
-        # Jointly optimize TX-nonlinearity and Rank-1 interference
         tx_pred = fit_tx_extended(rx - rank1_pred, all_terms)
         
         resid = rx - tx_pred
